@@ -1,0 +1,157 @@
+:root {
+    --primary-color: #4CAF50; /* Green */
+    --secondary-color: #2196F3; /* Blue */
+    --accent-color: #FF5722; /* Orange */
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --border-radius: 5px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 40px;
+}
+
+section {
+    margin-bottom: 40px;
+    background-color: white;
+    padding: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: var(--secondary-color);
+    margin-bottom: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select, textarea, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+    box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus, button:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: darken(var(--primary-color), 10%);
+}
+
+#goal-progress {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+#goal-progress-bar {
+    width: 80%;
+    margin-right: 10px;
+    height: 20px;
+    appearance: none;
+    background-color: #eee;
+    border-radius: var(--border-radius);
+}
+
+#goal-progress-bar::-webkit-progress-bar {
+    background-color: #eee;
+    border-radius: var(--border-radius);
+}
+
+#goal-progress-bar::-webkit-progress-value {
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius);
+}
+
+#goal-progress-bar::-moz-progress-bar {
+    background-color: var(--accent-color);
+    border-radius: var(--border-radius);
+}
+
+#goal-progress-text {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+canvas {
+    margin-top: 20px;
+    max-width: 100%;
+}
+
+#weight-log, #calorie-log, #workout-log {
+    margin-top: 20px;
+}
+
+.workout-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: var(--border-radius);
+}
+
+.workout-details {
+    flex-grow: 1;
+}
+
+.workout-actions {
+    margin-left: 10px;
+}
+
+.workout-actions button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 5px;
+}
+
+.workout-actions button:hover {
+    background-color: darken(var(--secondary-color), 10%);
+}
+
+@media (min-width: 600px) {
+    input, select, textarea, button {
+        width: auto;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    button {
+        width: auto;
+        padding: 10px 20px;
+    }
+}
