@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styless.css">
+    <title>Fitness Tracker</title>
+</head>
+
+<body>
+    <div id="workout-log">
+    <form>
+        <label> Set your Date:
+        <input type="date" id="workout-date" required></label>
+        <label> Enter your workout: 
+            <input type="text" id="workout-type" required></label>
+        <label> Set You workOut Time:
+            <input type="number" id="workout-duration" required> </label>
+        <label> Enter your Note:
+        </label><textarea id="workout-notes"></textarea></label>
+        <button id="add-workout">Add Workout</button>
+    </form>
+     </div>
+     <h1>Weight and Calorie Tracking:</h1>
+     <div id="weight-log"> Weight Tracking
+        <form>
+            <label>Set your Date:
+                <input type="date" id="weight-date" required></label>
+                <label>Weight (in kg or lbs): 
+                    <input type="number" id="weight" required></label>
+        </form>
+     </div>
+     <div id="calorie-log"> Calorie Tracking
+        <form>
+            <label>Set your Date:
+                <input type="date" id="calorie-date" required></label>
+                <label>Set your calories: 
+                    <input type="number" id="calories" required></label>
+        </form>
+     </div>
+
+
+   <script src="main.js"></script> 
+</body>
+</html>
