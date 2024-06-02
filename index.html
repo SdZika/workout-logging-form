@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Fitness Tracker</h1>
+
+    <section id="workout-logging">
+        <h2>Workout Logging</h2>
+        <form id="workout-form">
+            <label for="workout-date">Date:</label>
+            <input type="date" id="workout-date" required>
+            <label for="workout-type">Type (e.g., Running, Cycling):</label>
+            <input type="text" id="workout-type" required>
+            <label for="workout-duration">Duration (in minutes):</label>
+            <input type="number" id="workout-duration" required>
+            <label for="workout-notes">Notes:</label>
+            <textarea id="workout-notes"></textarea>
+            <button type="submit" id="add-workout">Add Workout</button>
+        </form>
+        <div id="workout-log"></div>
+    </section>
+    <h1>Progress Chart</h1>
+    <section id="workout-trends">
+        <h2>Workout Trends</h2>
+        <canvas id="workoutChart"></canvas>
+    </section>
+
+    <section id="goal-setting">
+        <h2>Set Fitness Goals</h2>
+        <form id="goal-form">
+            <label for="goal-type">Goal Type:</label>
+            <select id="goal-type">
+                <option value="duration">Total Duration</option>
+                <option value="workouts">Number of Workouts</option>
+            </select>
+            <label for="goal-value">Goal Value:</label>
+            <input type="number" id="goal-value" required>
+            <button type="submit">Set Goal</button>
+        </form>
+        <div id="goal-progress">
+            <h2>Goal Progress</h2>
+            <progress id="goal-progress-bar" value="0" max="100"></progress>
+            <span id="goal-progress-text">0%</span>
+        </div>
+    </section>
+
+    <section id="weight-tracking">
+        <h2>Weight Tracking</h2>
+        <form id="weight-form">
+            <label for="weight-date">Date:</label>
+            <input type="date" id="weight-date" required>
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required>
+            <button type="submit">Log Weight</button>
+        </form>
+        <div id="weight-log"></div>
+        <canvas id="weightChart"></canvas>
+    </section>
+
+    <section id="calorie-tracking">
+        <h2>Calorie Tracking</h2>
+        <form id="calorie-form">
+            <label for="calorie-date">Date:</label>
+            <input type="date" id="calorie-date" required>
+            <label for="calories">Calories:</label>
+            <input type="number" id="calories" required>
+            <button type="submit">Log Calories</button>
+        </form>
+        <div id="calorie-log"></div>
+        <canvas id="calorieChart"></canvas>
+    </section>
+
+    
+
+    <script src="scripts.js"></script>
+</body>
+</html>
