@@ -100,16 +100,37 @@ function deleteWorkout(entry, date, duration) {
 }
 
 function updateWorkoutChart(date, duration) {
-    const index = workoutChart.data.labels.indexOf(date);
+    const index = workoutChart.data.labels.indexOf(date); // Find the index of the date in the labels array
+     // If the date already exists in the labels array
     if (index !== -1) {
-        workoutChart.data.datasets[0].data[index] += parseInt(duration);
+        workoutChart.data.datasets[0].data[index] += parseInt(duration);// Add the new duration to the existing duration for that date
     } else {
-        workoutChart.data.labels.push(date);
-        workoutChart.data.datasets[0].data.push(parseInt(duration));
+        // If the date does not exist in the labels array
+        workoutChart.data.labels.push(date); // Add the new date to the labels array
+        workoutChart.data.datasets[0].data.push(parseInt(duration)); // Add the new duration to the data array
     }
-    workoutChart.update();
+    workoutChart.update(); // Update the chart to reflect the changes
 }
 
-//----------------------------------------------------------------------------
-
-//FUNCTION 2: 
+//PROGRES CHART
+const ctx = document.getElementById('workoutChart').getContext('2d');
+const workoutChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [], // Dates
+        datasets: [{
+            label: 'Workout Duration (minutes)',
+            data: [], // Durations
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
