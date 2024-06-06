@@ -134,3 +134,58 @@ const workoutChart = new Chart(ctx, {
         }
     }
 });
+
+
+// Natasa's part 
+
+const calorieForm = document.getElementById("calorie-form");
+const calorieLog = document.getElementById("calorie-log");
+
+calorieForm.addEventListener("submit", (e) => {
+    e.preventDefault(); 
+
+    const date = document.getElementById("calorie-date").value; 
+    const caloriesNumber = document.getElementById("calories").value; 
+
+    const caloriesIntake = {
+        date, 
+        caloriesNumber
+    };
+
+    addCaloriesToLog(caloriesIntake); 
+    //updateCaloriesChart(); 
+    calorieForm.reset(); 
+});
+
+function addCaloriesToLog(caloriesIntake) { 
+    const caloriesEntry = document.createElement("div"); 
+    caloriesEntry.className = "calories-entry"; 
+
+    const caloriesDetails = document.createElement("div"); 
+    caloriesDetails.className = "calories-details"; 
+    caloriesDetails.innerHTML = `
+        <strong>Date:</strong> ${caloriesIntake.date} <br>
+        <strong>Calories:</strong> ${caloriesIntake.caloriesNumber} kcal <br>
+    `;
+
+    const caloriesActions = document.createElement("div"); 
+    caloriesActions.className = "calories-actions"; 
+    const editCalories = document.createElement("button"); 
+    editCalories.textContent = "Edit";
+    const deleteCalories = document.createElement("button");
+    deleteCalories.textContent = "Delete"; 
+    const saveCalories = document.createElement("button");
+    saveCalories.textContent = "Save"; 
+    saveCalories.style.display = "none"; 
+
+    caloriesActions.appendChild(editCalories);
+    caloriesActions.appendChild(deleteCalories);
+    caloriesEntry.appendChild(caloriesDetails);
+    caloriesEntry.appendChild(caloriesActions);
+    calorieLog.appendChild(caloriesEntry); 
+
+    editCalories.addEventListener("click", () => editCalories(caloriesEntry, caloriesIntake, saveCalories, editCalories));
+    deleteCalories.addEventListener("click", () => deleteCalories(caloriesEntry, caloriesIntake.date, caloriesIntake.caloriesNumber));
+    saveCalories.addEventListener("click", () => saveCalories(caloriesEntry, caloriesIntake, saveCalories, editCalories));
+
+};
