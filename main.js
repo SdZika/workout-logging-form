@@ -189,3 +189,55 @@ function addCaloriesToLog(caloriesIntake) {
     saveCalories.addEventListener("click", () => saveCalories(caloriesEntry, caloriesIntake, saveCalories, editCalories));
 
 };
+
+//===================================================== Milena's Part
+
+document.addEventListener('DOMContentLoaded', () => {
+    const weightForm = document.getElementById('weightForm');
+    const weightDateInput = document.getElementById('weight-date');
+    const weightInput = document.getElementById('weight');
+    const weightLogDiv = document.getElementById('weight-log');
+    const weightChartCtx = document.getElementById('weightChart').getContext('2d');
+
+    let weightEntries = [];
+    let weightChart;
+
+    weightForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const entryDate = weightDateInput.value;
+        const weight = parseFloat(weightInput.value);
+
+        const weightEntry = {
+            date: entryDate,
+            weight
+        };
+
+        weightEntries.push(weightEntry);
+        displayWeightEntries();
+        updateChart();
+
+        weightForm.reset();
+    });
+
+    function displayWeightEntries() {
+        weightLogDiv.innerHTML = '';
+
+        weightEntries.forEach((entry, index) => {
+            const div = document.createElement('div');
+            div.className = 'weight-entry';
+            div.innerHTML = `
+                <strong>${entry.date}</strong> - ${entry.weight} kg
+                <button class="delete-button" data-index="${index}">Delete</button>
+            `;
+            weightLogDiv.appendChild(div);
+
+            const deleteButton = div.querySelector('.delete-button');
+            deleteButton.addEventListener('click', () => {
+                weightEntries.splice(index, 1);
+                displayWeightEntries();
+                updateChart();
+            });
+        });
+    }
+});
