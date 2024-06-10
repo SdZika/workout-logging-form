@@ -153,7 +153,7 @@ calorieForm.addEventListener("submit", (e) => {
     };
 
     addCaloriesToLog(caloriesIntake); 
-    //updateCaloriesChart(); 
+    updateCaloriesChart(); 
     calorieForm.reset(); 
 });
 
@@ -170,25 +170,96 @@ function addCaloriesToLog(caloriesIntake) {
 
     const caloriesActions = document.createElement("div"); 
     caloriesActions.className = "calories-actions"; 
-    const editCalories = document.createElement("button"); 
-    editCalories.textContent = "Edit";
-    const deleteCalories = document.createElement("button");
-    deleteCalories.textContent = "Delete"; 
-    const saveCalories = document.createElement("button");
-    saveCalories.textContent = "Save"; 
-    saveCalories.style.display = "none"; 
+    const editButtonCalories = document.createElement("button"); 
+    editButtonCalories.textContent = "Edit";
+    const saveButtonCalories = document.createElement("button");
+    saveButtonCalories.textContent = "Save"; 
+    saveButtonCalories.style.display = "none"; 
+    const deleteButtonCalories = document.createElement("button");
+    deleteButtonCalories.textContent = "Delete"; 
 
-    caloriesActions.appendChild(editCalories);
-    caloriesActions.appendChild(deleteCalories);
+    caloriesActions.appendChild(editButtonCalories);
+    caloriesActions.appendChild(deleteButtonCalories);
+    caloriesActions.appendChild(saveButtonCalories);
     caloriesEntry.appendChild(caloriesDetails);
     caloriesEntry.appendChild(caloriesActions);
     calorieLog.appendChild(caloriesEntry); 
 
-    editCalories.addEventListener("click", () => editCalories(caloriesEntry, caloriesIntake, saveCalories, editCalories));
-    deleteCalories.addEventListener("click", () => deleteCalories(caloriesEntry, caloriesIntake.date, caloriesIntake.caloriesNumber));
-    saveCalories.addEventListener("click", () => saveCalories(caloriesEntry, caloriesIntake, saveCalories, editCalories));
+    editButtonCalories.addEventListener("click", () => editCalories(caloriesEntry, caloriesIntake, saveButtonCalories, editButtonCalories));
+    saveButtonCalories.addEventListener("click", () => saveCalories(caloriesEntry, caloriesIntake, saveButtonCalories, editButtonCalories));
+    deleteButtonCalories.addEventListener("click", () => deleteCalories(caloriesEntry, caloriesIntake.date, caloriesIntake.caloriesNumber));
+   
 
-};
+}
+
+function editCalories(entry, caloriesIntake, saveButtonCalories, editButtonCalories){
+    const caloriesDetails = entry.querySelector(".calories-details");
+    caloriesDetails.innerHTML = `
+    <strong>Date:</strong><input type="date" class="edit-date" value="${caloriesIntake.date}"><br>
+    <strong>Calories:</strong><input type="number" class="edit-calories-number" value="${caloriesIntake.caloriesNumber}">
+    `;
+
+    saveButtonCalories.style.display = "inline"; 
+    editButtonCalories.style.display = "none"; 
+}
+
+function saveCalories (entry, caloriesIntake, saveButtonCalories, editButtonCalories){
+    const newDate = entry.querySelector(".edit-date").value; 
+    const newCaloriesNumber = entry.querySelector(".edit-calories-number").value; 
+
+    caloriesIntake.date = newDate; 
+    caloriesIntake.caloriesNumber = newCaloriesNumber; 
+
+    const caloriesDetails = entry.querySelector(".calories-details");
+    caloriesDetails.innerHTML = `
+        <strong>Date:</strong> ${caloriesIntake.date} <br>
+        <strong>Calories:</strong> ${caloriesIntake.caloriesNumber} kcal <br>
+    `;
+
+    saveButtonCalories.style.display = "none"; 
+    editButtonCalories.style.display = "inline";
+
+    updateCaloriesChart(caloriesIntake.date, newCaloriesNumber)
+}
+
+function deleteCalories(entry, date, caloriesNumber) {
+    entry.remove();
+    updateCaloriesChart(date, -caloriesNumber); 
+}
+
+function updateCaloriesChart(date, caloriesNumber){ 
+    const index = caloriesChart.data.labels.indexOf(date); 
+    if (index !== -1) {
+        caloriesChart.data.datasets[0].data[index] += parseInt(caloriesNumber);
+    } else {
+        caloriesChart.data.labels.push(date); 
+        caloriesChart.data.datasets[0].data.push(parseInt(caloriesNumber));
+    }
+    caloriesChart.update(); 
+}
+
+const kcalChart = document.getElementById('calorieChart').getContext('2d');
+const caloriesChart = new Chart(kcalChart, {
+    type: 'bar',
+    data: {
+        labels: [], // Dates
+        datasets: [{
+            label: 'Calories Intake (kcal)',
+            data: [], // Calories Number 
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
 
 //===================================================== Milena's Part
 

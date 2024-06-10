@@ -114,7 +114,7 @@ canvas {
     margin-top: 20px;
 }
 
-.workout-entry {
+.workout-entry, .calories-entry {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -124,11 +124,11 @@ canvas {
     border-radius: var(--border-radius);
 }
 
-.workout-details {
+.workout-details, .calories-details {
     flex-grow: 1;
 }
 
-.workout-actions {
+.workout-actions, .calories-actions {
     margin-left: 10px;
 }
 
@@ -141,7 +141,20 @@ canvas {
     margin-left: 5px;
 }
 
+.calories-actions button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 5px;
+}
+
 .workout-actions button:hover {
+    background-color: var(--secondary-color-dark);
+}
+
+.calories-actions button:hover {
     background-color: var(--secondary-color-dark);
 }
 
