@@ -262,16 +262,15 @@ const caloriesChart = new Chart(kcalChart, {
 
 
 //===================================================== Milena's Part
-
 document.addEventListener('DOMContentLoaded', () => {
     const weightForm = document.getElementById('weightForm');
     const weightDateInput = document.getElementById('weight-date');
     const weightInput = document.getElementById('weight');
     const weightLogDiv = document.getElementById('weight-log');
-    const weightChartCtx = document.getElementById('weightChart').getContext('2d');
+    const weightChartCanvas = document.getElementById('weightChart');
+    const ctx = weightChartCanvas.getContext('2d');
 
     let weightEntries = [];
-    let weightChart;
 
     weightForm.addEventListener('submit', (event) => {
         event.preventDefault();
@@ -280,13 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const weight = parseFloat(weightInput.value);
 
         const weightEntry = {
-            date: entryDate,
+            date: new Date(entryDate),
             weight
         };
 
         weightEntries.push(weightEntry);
         displayWeightEntries();
-        updateChart();
+        drawChart();
 
         weightForm.reset();
     });
@@ -298,7 +297,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const div = document.createElement('div');
             div.className = 'weight-entry';
             div.innerHTML = `
-                <strong>${entry.date}</strong> - ${entry.weight} kg
+                <strong>${entry.date.toDateString()}</strong> - ${entry.weight} kg
                 <button class="delete-button" data-index="${index}">Delete</button>
             `;
             weightLogDiv.appendChild(div);
@@ -307,8 +306,63 @@ document.addEventListener('DOMContentLoaded', () => {
             deleteButton.addEventListener('click', () => {
                 weightEntries.splice(index, 1);
                 displayWeightEntries();
-                updateChart();
+                drawChart();
             });
         });
+    }
+
+    function drawChart() {
+        
+        ctx.clearRect(0, 0, weightChartCanvas.width, weightChartCanvas.height);
+
+        if (weightEntries.length === 0) {
+            return;
+        }
+
+        // Sort entries by date
+        weightEntries.sort((a, b) => a.date - b.date);
+
+        // Get the dates and weights
+        const dates = weightEntries.map(entry => entry.date);
+        const weights = weightEntries.map(entry => entry.weight);
+
+        // Define the chart area
+        const padding = 50;
+        const chartWidth = weightChartCanvas.width - padding * 2;
+        const chartHeight = weightChartCanvas.height - padding * 2;
+        const maxWeight = Math.max(...weights);
+        const minWeight = Math.min(...weights);
+        const maxDate = dates[dates.length - 1];
+        const minDate = dates[0];
+
+        // Draw the axes
+        ctx.beginPath();
+        ctx.moveTo(padding, padding);
+        ctx.lineTo(padding, chartHeight + padding);
+        ctx.lineTo(chartWidth + padding, chartHeight + padding);
+        ctx.stroke();
+
+        // Draw the labels
+        ctx.fillText(maxWeight + ' kg', padding - 40, padding);
+        ctx.fillText(minWeight + ' kg', padding - 40, chartHeight + padding);
+        ctx.fillText(minDate.toDateString(), padding, chartHeight + padding + 20);
+        ctx.fillText(maxDate.toDateString(), chartWidth + padding - 50, chartHeight + padding + 20);
+
+        // Draw the data points and lines
+        ctx.beginPath();
+        for (let i = 0; i < weightEntries.length; i++) {
+            const x = padding + (dates[i] - minDate) / (maxDate - minDate) * chartWidth;
+            const y = chartHeight + padding - (weights[i] - minWeight) / (maxWeight - minWeight) * chartHeight;
+
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+
+            // Draw the data points
+            ctx.arc(x, y, 3, 0, Math.PI * 2, true);
+        }
+        ctx.stroke();
     }
 });
