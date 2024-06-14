@@ -136,79 +136,74 @@ const workoutChart = new Chart(ctx, {
 });
 
 
-// Natasa's part 
+//==================================================== Natasa's and Milutin's part 
 
 const calorieForm = document.getElementById("calorie-form");
 const calorieLog = document.getElementById("calorie-log");
 
 calorieForm.addEventListener("submit", (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
-    const date = document.getElementById("calorie-date").value; 
-    const caloriesNumber = document.getElementById("calories").value; 
+    const date = document.getElementById("calorie-date").value;
+    const caloriesNumber = parseInt(document.getElementById("calories").value);
 
-    const caloriesIntake = {
-        date, 
-        caloriesNumber
-    };
+    const caloriesIntake = { date, caloriesNumber };
 
-    addCaloriesToLog(caloriesIntake); 
-    updateCaloriesChart(); 
-    calorieForm.reset(); 
+    addCaloriesToLog(caloriesIntake);
+    updateCaloriesChart();
+    calorieForm.reset();
 });
 
-function addCaloriesToLog(caloriesIntake) { 
-    const caloriesEntry = document.createElement("div"); 
-    caloriesEntry.className = "calories-entry"; 
+function addCaloriesToLog(caloriesIntake) {
+    const caloriesEntry = document.createElement("div");
+    caloriesEntry.className = "calories-entry";
 
-    const caloriesDetails = document.createElement("div"); 
-    caloriesDetails.className = "calories-details"; 
+    const caloriesDetails = document.createElement("div");
+    caloriesDetails.className = "calories-details";
     caloriesDetails.innerHTML = `
         <strong>Date:</strong> ${caloriesIntake.date} <br>
         <strong>Calories:</strong> ${caloriesIntake.caloriesNumber} kcal <br>
     `;
 
-    const caloriesActions = document.createElement("div"); 
-    caloriesActions.className = "calories-actions"; 
-    const editButtonCalories = document.createElement("button"); 
+    const caloriesActions = document.createElement("div");
+    caloriesActions.className = "calories-actions";
+    const editButtonCalories = document.createElement("button");
     editButtonCalories.textContent = "Edit";
     const saveButtonCalories = document.createElement("button");
-    saveButtonCalories.textContent = "Save"; 
-    saveButtonCalories.style.display = "none"; 
+    saveButtonCalories.textContent = "Save";
+    saveButtonCalories.style.display = "none";
     const deleteButtonCalories = document.createElement("button");
-    deleteButtonCalories.textContent = "Delete"; 
+    deleteButtonCalories.textContent = "Delete";
 
     caloriesActions.appendChild(editButtonCalories);
     caloriesActions.appendChild(deleteButtonCalories);
     caloriesActions.appendChild(saveButtonCalories);
     caloriesEntry.appendChild(caloriesDetails);
     caloriesEntry.appendChild(caloriesActions);
-    calorieLog.appendChild(caloriesEntry); 
+    calorieLog.appendChild(caloriesEntry);
 
     editButtonCalories.addEventListener("click", () => editCalories(caloriesEntry, caloriesIntake, saveButtonCalories, editButtonCalories));
     saveButtonCalories.addEventListener("click", () => saveCalories(caloriesEntry, caloriesIntake, saveButtonCalories, editButtonCalories));
-    deleteButtonCalories.addEventListener("click", () => deleteCalories(caloriesEntry, caloriesIntake.date, caloriesIntake.caloriesNumber));
-   
-
+    deleteButtonCalories.addEventListener("click", () => deleteCalories(caloriesEntry, caloriesIntake.date));
 }
 
-function editCalories(entry, caloriesIntake, saveButtonCalories, editButtonCalories){
+function editCalories(entry, caloriesIntake, saveButtonCalories, editButtonCalories) {
     const caloriesDetails = entry.querySelector(".calories-details");
     caloriesDetails.innerHTML = `
-    <strong>Date:</strong><input type="date" class="edit-date" value="${caloriesIntake.date}"><br>
-    <strong>Calories:</strong><input type="number" class="edit-calories-number" value="${caloriesIntake.caloriesNumber}">
+        <strong>Date:</strong><input type="date" class="edit-date" value="${caloriesIntake.date}"><br>
+        <strong>Calories:</strong><input type="number" class="edit-calories-number" value="${caloriesIntake.caloriesNumber}">
     `;
 
-    saveButtonCalories.style.display = "inline"; 
-    editButtonCalories.style.display = "none"; 
+    saveButtonCalories.style.display = "inline";
+    editButtonCalories.style.display = "none";
 }
 
-function saveCalories (entry, caloriesIntake, saveButtonCalories, editButtonCalories){
-    const newDate = entry.querySelector(".edit-date").value; 
-    const newCaloriesNumber = entry.querySelector(".edit-calories-number").value; 
+function saveCalories(entry, caloriesIntake, saveButtonCalories, editButtonCalories) {
+    const newDate = entry.querySelector(".edit-date").value;
+    const newCaloriesNumber = parseInt(entry.querySelector(".edit-calories-number").value);
 
-    caloriesIntake.date = newDate; 
-    caloriesIntake.caloriesNumber = newCaloriesNumber; 
+    caloriesIntake.date = newDate;
+    caloriesIntake.caloriesNumber = newCaloriesNumber;
 
     const caloriesDetails = entry.querySelector(".calories-details");
     caloriesDetails.innerHTML = `
@@ -216,28 +211,46 @@ function saveCalories (entry, caloriesIntake, saveButtonCalories, editButtonCalo
         <strong>Calories:</strong> ${caloriesIntake.caloriesNumber} kcal <br>
     `;
 
-    saveButtonCalories.style.display = "none"; 
+    saveButtonCalories.style.display = "none";
     editButtonCalories.style.display = "inline";
 
-    updateCaloriesChart(caloriesIntake.date, newCaloriesNumber)
+    updateCaloriesChart();
 }
 
-function deleteCalories(entry, date, caloriesNumber) {
+function deleteCalories(entry, date) {
     entry.remove();
-    updateCaloriesChart(date, -caloriesNumber); 
+    updateCaloriesChart();
 }
 
-function updateCaloriesChart(date, caloriesNumber){ 
-    const index = caloriesChart.data.labels.indexOf(date); 
-    if (index !== -1) {
-        caloriesChart.data.datasets[0].data[index] += parseInt(caloriesNumber);
-    } else {
-        caloriesChart.data.labels.push(date); 
-        caloriesChart.data.datasets[0].data.push(parseInt(caloriesNumber));
-    }
-    caloriesChart.update(); 
+function updateCaloriesChart() {
+    // Clear previous data
+    caloriesChart.data.labels = [];
+    caloriesChart.data.datasets[0].data = [];
+
+    // Get all current entries
+    const calorieEntries = document.querySelectorAll('.calories-entry .calories-details');
+    calorieEntries.forEach(entry => {
+        const dateText = entry.querySelector('input.edit-date')?.value || entry.innerText.match(/Date: (.*)\n/)[1].trim();
+        const caloriesText = entry.querySelector('input.edit-calories-number')?.value || entry.innerText.match(/Calories: (\d+)/)[1].trim();
+
+        const date = dateText.trim();
+        const caloriesNumber = parseInt(caloriesText);
+
+        const index = caloriesChart.data.labels.indexOf(date);
+        if (index !== -1) {
+            caloriesChart.data.datasets[0].data[index] += caloriesNumber;
+        } else {
+            caloriesChart.data.labels.push(date);
+            caloriesChart.data.datasets[0].data.push(caloriesNumber);
+        }
+    });
+
+    
+
+    caloriesChart.update();
 }
 
+// Initialize calorie chart
 const kcalChart = document.getElementById('calorieChart').getContext('2d');
 const caloriesChart = new Chart(kcalChart, {
     type: 'bar',
@@ -245,7 +258,7 @@ const caloriesChart = new Chart(kcalChart, {
         labels: [], // Dates
         datasets: [{
             label: 'Calories Intake (kcal)',
-            data: [], // Calories Number 
+            data: [], // Calories Number
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
